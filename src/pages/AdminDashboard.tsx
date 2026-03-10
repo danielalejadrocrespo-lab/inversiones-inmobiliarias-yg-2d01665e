@@ -65,33 +65,23 @@ export default function AdminDashboard() {
   const unreadMessages = messages.filter((m) => !m.read).length;
 
   return (
-    <div className="min-h-screen bg-background">
-      <header className="border-b bg-card">
-        <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <Link to="/" className="flex items-center gap-2">
-              <span className="font-heading font-bold text-primary">Inversiones Inmobiliaria YG</span>
-            </Link>
-            <Badge variant="secondary">Admin</Badge>
-          </div>
-          <div className="flex items-center gap-3">
-            <Link to="/admin/mensajes">
-              <Button variant="ghost" size="sm">
-                <MessageSquare className="h-4 w-4 mr-1" />
-                Mensajes
-                {unreadMessages > 0 && (
-                  <Badge className="ml-1 bg-accent text-accent-foreground text-xs">{unreadMessages}</Badge>
-                )}
-              </Button>
-            </Link>
-            <Button variant="ghost" size="sm" onClick={signOut}>
-              <LogOut className="h-4 w-4 mr-1" /> Salir
+    <div className="py-8">
+      <div className="container mx-auto px-4">
+        <div className="flex items-center gap-3 mb-6">
+          <Badge variant="secondary">Admin</Badge>
+          <Link to="/admin/mensajes">
+            <Button variant="ghost" size="sm">
+              <MessageSquare className="h-4 w-4 mr-1" />
+              Mensajes
+              {unreadMessages > 0 && (
+                <Badge className="ml-1 bg-accent text-accent-foreground text-xs">{unreadMessages}</Badge>
+              )}
             </Button>
-          </div>
+          </Link>
+          <Button variant="ghost" size="sm" onClick={signOut}>
+            <LogOut className="h-4 w-4 mr-1" /> Salir
+          </Button>
         </div>
-      </header>
-
-      <div className="container mx-auto px-4 py-8">
         <div className="flex items-center justify-between mb-6">
           <h1 className="font-heading text-2xl font-bold">Propiedades ({properties.length})</h1>
           <Link to="/admin/propiedad/nueva">
