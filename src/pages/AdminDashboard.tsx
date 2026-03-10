@@ -70,8 +70,7 @@ export default function AdminDashboard() {
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <Link to="/" className="flex items-center gap-2">
-              <Home className="h-5 w-5 text-primary" />
-              <span className="font-heading font-bold">InmoVista</span>
+              <span className="font-heading font-bold text-primary">Inversiones Inmobiliaria YG</span>
             </Link>
             <Badge variant="secondary">Admin</Badge>
           </div>
