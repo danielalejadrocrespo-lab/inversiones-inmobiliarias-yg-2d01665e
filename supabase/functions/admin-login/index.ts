@@ -30,19 +30,52 @@ Deno.serve(async (req) => {
       );
     }
 
-    // Sign in as the admin user
     const supabase = createClient(
       Deno.env.get("SUPABASE_URL")!,
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
     );
 
-    // Generate a magic link token for the admin email
-    const { data, error } = await supabase.auth.signInWithPassword({
+    // Try to sign in first
+    let { data, error } = await supabase.auth.signInWithPassword({
       email: adminEmail,
       password: adminPassword,
     });
 
+    // If user doesn't exist, create it
     if (error) {
+      const { data: newUser, error: createError } = await supabase.auth.admin.createUser({
+        email: adminEmail,
+        password: adminPassword,
+        email_confirm: true,
+      });
+
+      if (createError) {
+        console.error("Create user error:", createError);
+        return new Response(
+          JSON.stringify({ error: "Error creando usuario admin" }),
+          { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        );
+      }
+
+      // Assign admin role
+      const { error: roleError } = await supabase
+        .from("user_roles")
+        .insert({ user_id: newUser.user.id, role: "admin" });
+
+      if (roleError) {
+        console.error("Role assign error:", roleError);
+      }
+
+      // Now sign in
+      const result = await supabase.auth.signInWithPassword({
+        email: adminEmail,
+        password: adminPassword,
+      });
+      data = result.data;
+      error = result.error;
+    }
+
+    if (error || !data?.session) {
       return new Response(
         JSON.stringify({ error: "Error de autenticación" }),
         { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
@@ -57,6 +90,7 @@ Deno.serve(async (req) => {
       { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   } catch (e) {
+    console.error("Unexpected error:", e);
     return new Response(
       JSON.stringify({ error: "Error interno" }),
       { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
