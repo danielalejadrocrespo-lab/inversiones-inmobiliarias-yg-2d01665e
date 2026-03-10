@@ -31,10 +31,10 @@ export function ContactForm({ propertyId }: ContactFormProps) {
     }
 
     setLoading(true);
-    const { error } = await supabase.from('contact_messages').insert({
+    const { error } = await supabase.from('contact_messages').insert([{
       ...parsed.data,
       property_id: propertyId ?? null,
-    });
+    }]);
     setLoading(false);
 
     if (error) {
