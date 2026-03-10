@@ -29,12 +29,12 @@ export default function AdminLoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background px-4">
+    <div className="flex-1 flex items-center justify-center px-4 py-12">
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <div className="flex items-center justify-center gap-2 mb-2">
             <Home className="h-6 w-6 text-primary" />
-            <span className="font-heading text-xl font-bold">InmoVista</span>
+            <span className="font-heading text-xl font-bold">Inversiones Inmobiliaria YG</span>
           </div>
           <CardTitle className="font-heading">Panel de Administración</CardTitle>
         </CardHeader>
