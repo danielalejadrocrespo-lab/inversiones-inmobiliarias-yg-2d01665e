@@ -32,7 +32,10 @@ export function ContactForm({ propertyId }: ContactFormProps) {
 
     setLoading(true);
     const { error } = await supabase.from('contact_messages').insert([{
-      ...parsed.data,
+      name: parsed.data.name,
+      email: parsed.data.email,
+      phone: parsed.data.phone || null,
+      message: parsed.data.message,
       property_id: propertyId ?? null,
     }]);
     setLoading(false);
