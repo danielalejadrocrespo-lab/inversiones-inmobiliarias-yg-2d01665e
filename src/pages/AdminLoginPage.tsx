@@ -6,10 +6,10 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Home } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
 
 export default function AdminLoginPage() {
-  const { user, isAdmin, loading, signIn } = useAuth();
-  const [email, setEmail] = useState('');
+  const { user, isAdmin, loading } = useAuth();
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [submitting, setSubmitting] = useState(false);
@@ -21,11 +21,31 @@ export default function AdminLoginPage() {
     e.preventDefault();
     setError('');
     setSubmitting(true);
-    const { error } = await signIn(email, password);
-    setSubmitting(false);
-    if (error) {
-      setError('Credenciales inválidas');
+
+    try {
+      const { data, error: fnError } = await supabase.functions.invoke('admin-login', {
+        body: { password },
+      });
+
+      if (fnError || !data?.access_token) {
+        setError(data?.error || 'Clave incorrecta');
+        setSubmitting(false);
+        return;
+      }
+
+      const { error: sessionError } = await supabase.auth.setSession({
+        access_token: data.access_token,
+        refresh_token: data.refresh_token,
+      });
+
+      if (sessionError) {
+        setError('Error al iniciar sesión');
+      }
+    } catch {
+      setError('Error de conexión');
     }
+
+    setSubmitting(false);
   };
 
   return (
@@ -39,19 +59,17 @@ export default function AdminLoginPage() {
           <CardTitle className="font-heading">Panel de Administración</CardTitle>
         </CardHeader>
         <CardContent>
-          {user && !isAdmin && (
-            <p className="text-destructive text-sm mb-4 text-center">
-              Tu cuenta no tiene permisos de administrador.
-            </p>
-          )}
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <Label htmlFor="email">Email</Label>
-              <Input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-            </div>
-            <div>
-              <Label htmlFor="password">Contraseña</Label>
-              <Input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+              <Label htmlFor="password">Clave de acceso</Label>
+              <Input
+                id="password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Ingresa la clave"
+                required
+              />
             </div>
             {error && <p className="text-destructive text-sm">{error}</p>}
             <Button type="submit" className="w-full" disabled={submitting}>
