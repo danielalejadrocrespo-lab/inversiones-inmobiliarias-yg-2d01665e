@@ -67,15 +67,13 @@ export function Navbar() {
               {link.label}
             </Link>
           ))}
-          {isAdmin && (
-            <Link
-              to="/admin"
-              onClick={() => setIsOpen(false)}
-              className="block bg-primary text-primary-foreground px-4 py-2 rounded-md font-heading font-semibold text-sm text-center"
-            >
-              Admin
-            </Link>
-          )}
+          <Link
+            to={isAdmin ? '/admin' : '/admin/login'}
+            onClick={() => setIsOpen(false)}
+            className="block bg-primary text-primary-foreground px-4 py-2 rounded-md font-heading font-semibold text-sm text-center"
+          >
+            Admin
+          </Link>
         </nav>
       )}
     </header>
