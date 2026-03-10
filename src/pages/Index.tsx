@@ -1,11 +1,37 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+const phrase = "Esoqueteestoypassandoesunapáginaweb";
+const longPhrase = "Eso que te estoy pasando es una página web ";
 
 const Index = () => {
+  // Generate enough repetitions to fill ~3 viewports at massive text
+  const wallText = longPhrase.repeat(200);
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="mb-4 text-4xl font-bold">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
+    <div className="bg-background">
+      {/* The Wall */}
+      <div
+        className="font-wall text-muted-foreground overflow-hidden select-none"
+        style={{
+          fontSize: "18vw",
+          lineHeight: "0.85em",
+          wordBreak: "break-all",
+          letterSpacing: "-0.02em",
+        }}
+      >
+        {wallText}
+      </div>
+
+      {/* The Break — The Reveal */}
+      <div className="h-screen flex items-center justify-center px-8">
+        <p
+          className="font-reveal text-foreground text-center"
+          style={{
+            fontSize: "clamp(1.5rem, 3vw, 2.5rem)",
+            lineHeight: "1.4em",
+            maxWidth: "20em",
+          }}
+        >
+          Eso que te estoy pasando es una página web.
+        </p>
       </div>
     </div>
   );
