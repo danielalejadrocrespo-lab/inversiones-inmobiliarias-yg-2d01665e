@@ -17,6 +17,13 @@ export default function AdminLoginPage() {
     }
   }, [loading, isAdmin, navigate]);
 
+  // Si un usuario no autenticado llega aquí directamente, redirigir al inicio
+  useEffect(() => {
+    if (!loading && !isAdmin) {
+      navigate('/', { replace: true });
+    }
+  }, [loading, isAdmin, navigate]);
+
   useEffect(() => {
     inputRefs.current[0]?.focus();
   }, []);
