@@ -169,7 +169,7 @@ export default function PropertyDetailPage() {
             {/* Sidebar */}
             <div className="space-y-4">
               <a
-                href={`https://wa.me/5215512345678?text=${whatsappMsg}`}
+                href={`https://wa.me/584167405367?text=${whatsappMsg}`}
                 target="_blank"
                 rel="noopener noreferrer"
               >
