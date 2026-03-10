@@ -11,7 +11,7 @@ import { formatPrice, propertyTypeLabels, operationLabels, type Property } from 
 import { toast } from '@/hooks/use-toast';
 
 export default function AdminDashboard() {
-  const { user, isAdmin, loading, signOut } = useAuth();
+  const { isAdmin, loading, signOut } = useAuth();
   const queryClient = useQueryClient();
 
   const { data: properties = [], isLoading } = useQuery({
