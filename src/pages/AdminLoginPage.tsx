@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Navigate } from 'react-router-dom';
+import { useNavigate, Navigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -10,6 +10,7 @@ import { supabase } from '@/integrations/supabase/client';
 
 export default function AdminLoginPage() {
   const { user, isAdmin, loading } = useAuth();
+  const navigate = useNavigate();
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [submitting, setSubmitting] = useState(false);
@@ -40,12 +41,16 @@ export default function AdminLoginPage() {
 
       if (sessionError) {
         setError('Error al iniciar sesión');
+        setSubmitting(false);
+        return;
       }
+
+      // Navigate directly - the auth state will catch up
+      navigate('/admin', { replace: true });
     } catch {
       setError('Error de conexión');
+      setSubmitting(false);
     }
-
-    setSubmitting(false);
   };
 
   return (
