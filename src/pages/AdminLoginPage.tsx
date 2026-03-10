@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { useNavigate, Navigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -15,8 +15,14 @@ export default function AdminLoginPage() {
   const [error, setError] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
+  // Redirect when authenticated as admin
+  useEffect(() => {
+    if (!loading && user && isAdmin) {
+      navigate('/admin', { replace: true });
+    }
+  }, [loading, user, isAdmin, navigate]);
+
   if (loading) return <div className="min-h-screen flex items-center justify-center bg-background">Cargando...</div>;
-  if (user && isAdmin) return <Navigate to="/admin" replace />;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -42,11 +48,8 @@ export default function AdminLoginPage() {
       if (sessionError) {
         setError('Error al iniciar sesión');
         setSubmitting(false);
-        return;
       }
-
-      // Navigate directly - the auth state will catch up
-      navigate('/admin', { replace: true });
+      // Don't setSubmitting(false) on success - the useEffect will handle redirect
     } catch {
       setError('Error de conexión');
       setSubmitting(false);
@@ -64,6 +67,11 @@ export default function AdminLoginPage() {
           <CardTitle className="font-heading">Panel de Administración</CardTitle>
         </CardHeader>
         <CardContent>
+          {user && !isAdmin && !submitting && (
+            <p className="text-destructive text-sm mb-4 text-center">
+              Tu cuenta no tiene permisos de administrador.
+            </p>
+          )}
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <Label htmlFor="password">Clave de acceso</Label>
