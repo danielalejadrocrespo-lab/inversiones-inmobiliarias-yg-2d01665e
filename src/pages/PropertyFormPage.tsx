@@ -138,7 +138,7 @@ export default function PropertyFormPage() {
   };
 
   if (authLoading) return <div className="min-h-screen flex items-center justify-center">Cargando...</div>;
-  if (!user || !isAdmin) return <Navigate to="/admin/login" replace />;
+  if (!isAdmin) return <Navigate to="/admin/login" replace />;
 
   return (
     <div className="py-8">

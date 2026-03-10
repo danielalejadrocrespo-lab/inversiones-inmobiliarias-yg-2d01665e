@@ -60,7 +60,7 @@ export default function AdminDashboard() {
   });
 
   if (loading) return <div className="min-h-screen flex items-center justify-center">Cargando...</div>;
-  if (!user || !isAdmin) return <Navigate to="/admin/login" replace />;
+  if (!isAdmin) return <Navigate to="/admin/login" replace />;
 
   const unreadMessages = messages.filter((m) => !m.read).length;
 
