@@ -14,16 +14,145 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      contact_messages: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          message: string
+          name: string
+          phone: string | null
+          property_id: string | null
+          read: boolean | null
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          message: string
+          name: string
+          phone?: string | null
+          property_id?: string | null
+          read?: boolean | null
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          message?: string
+          name?: string
+          phone?: string | null
+          property_id?: string | null
+          read?: boolean | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "contact_messages_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      properties: {
+        Row: {
+          active: boolean | null
+          address: string | null
+          area_m2: number | null
+          bathrooms: number | null
+          bedrooms: number | null
+          city: string | null
+          created_at: string
+          description: string | null
+          featured: boolean | null
+          id: string
+          images: string[] | null
+          neighborhood: string | null
+          operation: Database["public"]["Enums"]["operation_type"]
+          parking_spaces: number | null
+          price: number
+          property_type: Database["public"]["Enums"]["property_type"]
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean | null
+          address?: string | null
+          area_m2?: number | null
+          bathrooms?: number | null
+          bedrooms?: number | null
+          city?: string | null
+          created_at?: string
+          description?: string | null
+          featured?: boolean | null
+          id?: string
+          images?: string[] | null
+          neighborhood?: string | null
+          operation: Database["public"]["Enums"]["operation_type"]
+          parking_spaces?: number | null
+          price: number
+          property_type: Database["public"]["Enums"]["property_type"]
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean | null
+          address?: string | null
+          area_m2?: number | null
+          bathrooms?: number | null
+          bedrooms?: number | null
+          city?: string | null
+          created_at?: string
+          description?: string | null
+          featured?: boolean | null
+          id?: string
+          images?: string[] | null
+          neighborhood?: string | null
+          operation?: Database["public"]["Enums"]["operation_type"]
+          parking_spaces?: number | null
+          price?: number
+          property_type?: Database["public"]["Enums"]["property_type"]
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "user"
+      operation_type: "venta" | "renta"
+      property_type: "casa" | "departamento" | "terreno" | "local_comercial"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +279,10 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "user"],
+      operation_type: ["venta", "renta"],
+      property_type: ["casa", "departamento", "terreno", "local_comercial"],
+    },
   },
 } as const
