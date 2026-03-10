@@ -1,18 +1,19 @@
 import { Link } from 'react-router-dom';
-import { Home } from 'lucide-react';
+import { Phone, Mail, MapPin } from 'lucide-react';
+import logo from '@/assets/logo.jpeg';
 
 export function Footer() {
   return (
-    <footer className="bg-foreground text-background py-12">
+    <footer className="bg-primary text-primary-foreground py-12">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
             <div className="flex items-center gap-2 mb-4">
-              <Home className="h-5 w-5" />
-              <span className="font-heading text-lg font-bold">InmoVista</span>
+              <img src={logo} alt="Logo" className="h-10 w-10 rounded" />
+              <span className="font-heading text-lg font-bold">Inversiones Inmobiliaria YG</span>
             </div>
             <p className="text-sm opacity-70">
-              Tu portal inmobiliario de confianza. Encuentra tu hogar ideal.
+              Ventas y alquileres de inmuebles. Tu aliado de confianza en bienes raíces.
             </p>
           </div>
           <div>
@@ -25,14 +26,21 @@ export function Footer() {
           </div>
           <div>
             <h4 className="font-heading font-semibold mb-3">Contacto</h4>
-            <div className="flex flex-col gap-2 text-sm opacity-70">
-              <p>info@inmovista.com</p>
-              <p>+52 (55) 1234-5678</p>
+            <div className="flex flex-col gap-3 text-sm opacity-70">
+              <a href="tel:+584167405367" className="flex items-center gap-2 hover:opacity-100">
+                <Phone className="h-4 w-4" /> +58 416-7405367
+              </a>
+              <a href="tel:+584121472995" className="flex items-center gap-2 hover:opacity-100">
+                <Phone className="h-4 w-4" /> +58 412-1472995
+              </a>
+              <p className="flex items-center gap-2">
+                <Mail className="h-4 w-4" /> info@inversionesyg.com
+              </p>
             </div>
           </div>
         </div>
-        <div className="mt-8 pt-8 border-t border-background/20 text-center text-sm opacity-50">
-          © {new Date().getFullYear()} InmoVista. Todos los derechos reservados.
+        <div className="mt-8 pt-8 border-t border-primary-foreground/20 text-center text-sm opacity-50">
+          © {new Date().getFullYear()} Inversiones Inmobiliaria YG. Todos los derechos reservados.
         </div>
       </div>
     </footer>
