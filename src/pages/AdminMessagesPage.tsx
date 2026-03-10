@@ -9,7 +9,7 @@ import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 
 export default function AdminMessagesPage() {
-  const { user, isAdmin, loading } = useAuth();
+  const { isAdmin, loading } = useAuth();
   const queryClient = useQueryClient();
 
   const { data: messages = [] } = useQuery({
