@@ -38,12 +38,14 @@ export function Navbar() {
               {link.label}
             </Link>
           ))}
-          <Link
-            to={isAdmin ? '/admin' : '/admin/login'}
-            className="bg-primary text-primary-foreground px-4 py-2 rounded-md font-heading font-semibold text-sm hover:opacity-90 transition-opacity"
-          >
-            Admin
-          </Link>
+          {isAdmin && (
+            <Link
+              to="/admin"
+              className="bg-primary text-primary-foreground px-4 py-2 rounded-md font-heading font-semibold text-sm hover:opacity-90 transition-opacity"
+            >
+              Admin
+            </Link>
+          )}
         </nav>
 
         {/* Mobile toggle */}
@@ -67,13 +69,15 @@ export function Navbar() {
               {link.label}
             </Link>
           ))}
-          <Link
-            to={isAdmin ? '/admin' : '/admin/login'}
-            onClick={() => setIsOpen(false)}
-            className="block bg-primary text-primary-foreground px-4 py-2 rounded-md font-heading font-semibold text-sm text-center"
-          >
-            Admin
-          </Link>
+          {isAdmin && (
+            <Link
+              to="/admin"
+              onClick={() => setIsOpen(false)}
+              className="block bg-primary text-primary-foreground px-4 py-2 rounded-md font-heading font-semibold text-sm text-center"
+            >
+              Admin
+            </Link>
+          )}
         </nav>
       )}
     </header>
