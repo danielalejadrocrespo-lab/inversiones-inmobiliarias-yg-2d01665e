@@ -9,7 +9,7 @@ import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 
 export default function AdminMessagesPage() {
-  const { user, isAdmin, loading } = useAuth();
+  const { isAdmin, loading } = useAuth();
   const queryClient = useQueryClient();
 
   const { data: messages = [] } = useQuery({
@@ -32,7 +32,7 @@ export default function AdminMessagesPage() {
   });
 
   if (loading) return <div className="min-h-screen flex items-center justify-center">Cargando...</div>;
-  if (!user || !isAdmin) return <Navigate to="/admin/login" replace />;
+  if (!isAdmin) return <Navigate to="/admin/login" replace />;
 
   return (
     <div className="py-8">

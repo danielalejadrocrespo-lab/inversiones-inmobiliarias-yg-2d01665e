@@ -1,94 +1,102 @@
-import { useState, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Home } from 'lucide-react';
-import { supabase } from '@/integrations/supabase/client';
 
 export default function AdminLoginPage() {
-  const { user, isAdmin, loading } = useAuth();
+  const { isAdmin, loading, loginWithPin } = useAuth();
   const navigate = useNavigate();
-  const [password, setPassword] = useState('');
+  const [pin, setPin] = useState(['', '', '', '']);
   const [error, setError] = useState('');
-  const [submitting, setSubmitting] = useState(false);
+  const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
-  // Redirect when authenticated as admin
   useEffect(() => {
-    if (!loading && user && isAdmin) {
+    if (!loading && isAdmin) {
       navigate('/admin', { replace: true });
     }
-  }, [loading, user, isAdmin, navigate]);
+  }, [loading, isAdmin, navigate]);
 
-  if (loading) return <div className="min-h-screen flex items-center justify-center bg-background">Cargando...</div>;
+  useEffect(() => {
+    inputRefs.current[0]?.focus();
+  }, []);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleChange = (index: number, value: string) => {
+    if (!/^\d*$/.test(value)) return;
+    const newPin = [...pin];
+    newPin[index] = value.slice(-1);
+    setPin(newPin);
     setError('');
-    setSubmitting(true);
 
-    try {
-      const { data, error: fnError } = await supabase.functions.invoke('admin-login', {
-        body: { password },
-      });
+    if (value && index < 3) {
+      inputRefs.current[index + 1]?.focus();
+    }
 
-      if (fnError || !data?.access_token) {
-        setError(data?.error || 'Clave incorrecta');
-        setSubmitting(false);
-        return;
+    // Auto-submit when all 4 digits entered
+    if (value && index === 3) {
+      const fullPin = newPin.join('');
+      if (fullPin.length === 4) {
+        const success = loginWithPin(fullPin);
+        if (!success) {
+          setError('PIN incorrecto');
+          setPin(['', '', '', '']);
+          setTimeout(() => inputRefs.current[0]?.focus(), 100);
+        }
       }
-
-      const { error: sessionError } = await supabase.auth.setSession({
-        access_token: data.access_token,
-        refresh_token: data.refresh_token,
-      });
-
-      if (sessionError) {
-        setError('Error al iniciar sesión');
-        setSubmitting(false);
-      }
-      // Don't setSubmitting(false) on success - the useEffect will handle redirect
-    } catch {
-      setError('Error de conexión');
-      setSubmitting(false);
     }
   };
 
+  const handleKeyDown = (index: number, e: React.KeyboardEvent) => {
+    if (e.key === 'Backspace' && !pin[index] && index > 0) {
+      inputRefs.current[index - 1]?.focus();
+    }
+  };
+
+  const handlePaste = (e: React.ClipboardEvent) => {
+    e.preventDefault();
+    const pasted = e.clipboardData.getData('text').replace(/\D/g, '').slice(0, 4);
+    if (pasted.length === 4) {
+      const newPin = pasted.split('');
+      setPin(newPin);
+      const success = loginWithPin(pasted);
+      if (!success) {
+        setError('PIN incorrecto');
+        setPin(['', '', '', '']);
+        setTimeout(() => inputRefs.current[0]?.focus(), 100);
+      }
+    }
+  };
+
+  if (loading) return <div className="min-h-screen flex items-center justify-center bg-background">Cargando...</div>;
+
   return (
     <div className="flex-1 flex items-center justify-center px-4 py-12">
-      <Card className="w-full max-w-md">
+      <Card className="w-full max-w-sm">
         <CardHeader className="text-center">
           <div className="flex items-center justify-center gap-2 mb-2">
             <Home className="h-6 w-6 text-primary" />
             <span className="font-heading text-xl font-bold">Inversiones Inmobiliaria YG</span>
           </div>
-          <CardTitle className="font-heading">Panel de Administración</CardTitle>
+          <CardTitle className="font-heading text-lg">Ingresa tu PIN</CardTitle>
         </CardHeader>
         <CardContent>
-          {user && !isAdmin && !submitting && (
-            <p className="text-destructive text-sm mb-4 text-center">
-              Tu cuenta no tiene permisos de administrador.
-            </p>
-          )}
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <Label htmlFor="password">Clave de acceso</Label>
-              <Input
-                id="password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="Ingresa la clave"
-                required
+          <div className="flex justify-center gap-3 mb-4" onPaste={handlePaste}>
+            {pin.map((digit, i) => (
+              <input
+                key={i}
+                ref={(el) => { inputRefs.current[i] = el; }}
+                type="text"
+                inputMode="numeric"
+                maxLength={1}
+                value={digit}
+                onChange={(e) => handleChange(i, e.target.value)}
+                onKeyDown={(e) => handleKeyDown(i, e)}
+                className="w-14 h-14 text-center text-2xl font-bold rounded-lg border-2 border-input bg-background focus:border-primary focus:outline-none focus:ring-2 focus:ring-ring transition-colors"
               />
-            </div>
-            {error && <p className="text-destructive text-sm">{error}</p>}
-            <Button type="submit" className="w-full" disabled={submitting}>
-              {submitting ? 'Ingresando...' : 'Ingresar'}
-            </Button>
-          </form>
+            ))}
+          </div>
+          {error && <p className="text-destructive text-sm text-center">{error}</p>}
+          <p className="text-muted-foreground text-xs text-center mt-3">Ingresa el PIN de 4 dígitos para acceder</p>
         </CardContent>
       </Card>
     </div>

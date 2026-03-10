@@ -11,7 +11,7 @@ import { formatPrice, propertyTypeLabels, operationLabels, type Property } from 
 import { toast } from '@/hooks/use-toast';
 
 export default function AdminDashboard() {
-  const { user, isAdmin, loading, signOut } = useAuth();
+  const { isAdmin, loading, signOut } = useAuth();
   const queryClient = useQueryClient();
 
   const { data: properties = [], isLoading } = useQuery({
@@ -60,7 +60,7 @@ export default function AdminDashboard() {
   });
 
   if (loading) return <div className="min-h-screen flex items-center justify-center">Cargando...</div>;
-  if (!user || !isAdmin) return <Navigate to="/admin/login" replace />;
+  if (!isAdmin) return <Navigate to="/admin/login" replace />;
 
   const unreadMessages = messages.filter((m) => !m.read).length;
 

@@ -41,7 +41,7 @@ export default function PropertyFormPage() {
   const { id } = useParams();
   const isEdit = !!id;
   const navigate = useNavigate();
-  const { user, isAdmin, loading: authLoading } = useAuth();
+  const { isAdmin, loading: authLoading } = useAuth();
   const queryClient = useQueryClient();
   const fileRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
@@ -138,7 +138,7 @@ export default function PropertyFormPage() {
   };
 
   if (authLoading) return <div className="min-h-screen flex items-center justify-center">Cargando...</div>;
-  if (!user || !isAdmin) return <Navigate to="/admin/login" replace />;
+  if (!isAdmin) return <Navigate to="/admin/login" replace />;
 
   return (
     <div className="py-8">

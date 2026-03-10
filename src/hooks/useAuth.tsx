@@ -1,87 +1,42 @@
-import { useState, useEffect, createContext, useContext, useCallback } from 'react';
-import { supabase } from '@/integrations/supabase/client';
-import type { User, Session } from '@supabase/supabase-js';
+import { useState, useEffect, createContext, useContext } from 'react';
 
 interface AuthContextType {
-  user: User | null;
-  session: Session | null;
   isAdmin: boolean;
   loading: boolean;
-  signIn: (email: string, password: string) => Promise<{ error: Error | null }>;
-  signOut: () => Promise<void>;
+  loginWithPin: (pin: string) => boolean;
+  signOut: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
+const ADMIN_PIN = '3011';
+const STORAGE_KEY = 'admin_authenticated';
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<User | null>(null);
-  const [session, setSession] = useState<Session | null>(null);
   const [isAdmin, setIsAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  const checkAdmin = useCallback(async (userId: string) => {
-    try {
-      const { data } = await supabase
-        .from('user_roles')
-        .select('role')
-        .eq('user_id', userId)
-        .eq('role', 'admin')
-        .maybeSingle();
-      setIsAdmin(!!data);
-    } catch {
-      setIsAdmin(false);
-    }
+  useEffect(() => {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    setIsAdmin(stored === 'true');
+    setLoading(false);
   }, []);
 
-  useEffect(() => {
-    let mounted = true;
-
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (_event, newSession) => {
-        if (!mounted) return;
-        setSession(newSession);
-        setUser(newSession?.user ?? null);
-        if (newSession?.user) {
-          // Use setTimeout to avoid potential Supabase deadlocks
-          setTimeout(async () => {
-            if (!mounted) return;
-            await checkAdmin(newSession.user.id);
-            if (mounted) setLoading(false);
-          }, 0);
-        } else {
-          setIsAdmin(false);
-          setLoading(false);
-        }
-      }
-    );
-
-    supabase.auth.getSession().then(async ({ data: { session: existingSession } }) => {
-      if (!mounted) return;
-      setSession(existingSession);
-      setUser(existingSession?.user ?? null);
-      if (existingSession?.user) {
-        await checkAdmin(existingSession.user.id);
-      }
-      if (mounted) setLoading(false);
-    });
-
-    return () => {
-      mounted = false;
-      subscription.unsubscribe();
-    };
-  }, [checkAdmin]);
-
-  const signIn = async (email: string, password: string) => {
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
-    return { error: error as Error | null };
+  const loginWithPin = (pin: string) => {
+    if (pin === ADMIN_PIN) {
+      localStorage.setItem(STORAGE_KEY, 'true');
+      setIsAdmin(true);
+      return true;
+    }
+    return false;
   };
 
-  const signOut = async () => {
-    await supabase.auth.signOut();
+  const signOut = () => {
+    localStorage.removeItem(STORAGE_KEY);
+    setIsAdmin(false);
   };
 
   return (
-    <AuthContext.Provider value={{ user, session, isAdmin, loading, signIn, signOut }}>
+    <AuthContext.Provider value={{ isAdmin, loading, loginWithPin, signOut }}>
       {children}
     </AuthContext.Provider>
   );
