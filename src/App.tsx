@@ -4,6 +4,8 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider } from "@/hooks/useAuth";
+import { Navbar } from "@/components/Navbar";
+import { Footer } from "@/components/Footer";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import PropertiesPage from "./pages/PropertiesPage";
@@ -23,18 +25,24 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <AuthProvider>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/propiedades" element={<PropertiesPage />} />
-            <Route path="/propiedad/:id" element={<PropertyDetailPage />} />
-            <Route path="/contacto" element={<ContactPage />} />
-            <Route path="/admin/login" element={<AdminLoginPage />} />
-            <Route path="/admin" element={<AdminDashboard />} />
-            <Route path="/admin/propiedad/nueva" element={<PropertyFormPage />} />
-            <Route path="/admin/propiedad/:id" element={<PropertyFormPage />} />
-            <Route path="/admin/mensajes" element={<AdminMessagesPage />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
+          <div className="min-h-screen flex flex-col">
+            <Navbar />
+            <main className="flex-1">
+              <Routes>
+                <Route path="/" element={<Index />} />
+                <Route path="/propiedades" element={<PropertiesPage />} />
+                <Route path="/propiedad/:id" element={<PropertyDetailPage />} />
+                <Route path="/contacto" element={<ContactPage />} />
+                <Route path="/admin/login" element={<AdminLoginPage />} />
+                <Route path="/admin" element={<AdminDashboard />} />
+                <Route path="/admin/propiedad/nueva" element={<PropertyFormPage />} />
+                <Route path="/admin/propiedad/:id" element={<PropertyFormPage />} />
+                <Route path="/admin/mensajes" element={<AdminMessagesPage />} />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </main>
+            <Footer />
+          </div>
         </AuthProvider>
       </BrowserRouter>
     </TooltipProvider>
