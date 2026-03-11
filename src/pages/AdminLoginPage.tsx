@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Home } from 'lucide-react';
@@ -7,6 +7,7 @@ import { Home } from 'lucide-react';
 export default function AdminLoginPage() {
   const { isAdmin, loading, loginWithPin } = useAuth();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [pin, setPin] = useState(['', '', '', '']);
   const [error, setError] = useState('');
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
@@ -14,8 +15,13 @@ export default function AdminLoginPage() {
   useEffect(() => {
     if (!loading && isAdmin) {
       navigate('/admin', { replace: true });
+      return;
     }
-  }, [loading, isAdmin, navigate]);
+    // Only allow access with ?access=admin parameter, otherwise redirect to home
+    if (!loading && !isAdmin && searchParams.get('access') !== 'admin') {
+      navigate('/', { replace: true });
+    }
+  }, [loading, isAdmin, navigate, searchParams]);
 
   useEffect(() => {
     inputRefs.current[0]?.focus();
