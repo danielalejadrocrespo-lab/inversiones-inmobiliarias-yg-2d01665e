@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Home } from 'lucide-react';
@@ -7,6 +7,7 @@ import { Home } from 'lucide-react';
 export default function AdminLoginPage() {
   const { isAdmin, loading, loginWithPin } = useAuth();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [pin, setPin] = useState(['', '', '', '']);
   const [error, setError] = useState('');
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
@@ -14,22 +15,13 @@ export default function AdminLoginPage() {
   useEffect(() => {
     if (!loading && isAdmin) {
       navigate('/admin', { replace: true });
+      return;
     }
-  }, [loading, isAdmin, navigate]);
-
-  // If someone lands here from a direct URL without intent, redirect to home
-  useEffect(() => {
-    // Check if user arrived here as the initial page load (not via internal navigation)
-    if (!loading && !isAdmin && window.history.length <= 2 && document.referrer === '') {
-      // Only redirect if this seems like a fresh visit (not intentional navigation)
-      const isIntentional = sessionStorage.getItem('admin_login_intent');
-      if (!isIntentional) {
-        navigate('/', { replace: true });
-        return;
-      }
+    // Only allow access with ?access=admin parameter, otherwise redirect to home
+    if (!loading && !isAdmin && searchParams.get('access') !== 'admin') {
+      navigate('/', { replace: true });
     }
-    sessionStorage.setItem('admin_login_intent', 'true');
-  }, [loading, isAdmin, navigate]);
+  }, [loading, isAdmin, navigate, searchParams]);
 
   useEffect(() => {
     inputRefs.current[0]?.focus();
