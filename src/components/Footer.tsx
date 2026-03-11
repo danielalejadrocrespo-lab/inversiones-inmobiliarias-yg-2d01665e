@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Phone, Mail, MapPin } from 'lucide-react';
+import { Phone, Mail, MapPin, Instagram } from 'lucide-react';
 import logo from '@/assets/logo.jpeg';
 
 export function Footer() {
@@ -22,9 +22,12 @@ export function Footer() {
               <a href="tel:+584121472995" className="flex items-center gap-2 hover:opacity-100">
                 <Phone className="h-4 w-4" /> +58 412-1472995
               </a>
-              <p className="flex items-center gap-2">
-                <Mail className="h-4 w-4" /> info@inmobiliariayg.com
-              </p>
+              <a href="mailto:yuranci1212@gmail.com" className="flex items-center gap-2 hover:opacity-100">
+                <Mail className="h-4 w-4" /> yuranci1212@gmail.com
+              </a>
+              <a href="https://www.instagram.com/inmobiliaria_yg?igsh=dWs3ZTBwY2k4emcz" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:opacity-100">
+                <Instagram className="h-4 w-4" /> @inmobiliaria_yg
+              </a>
               <p className="flex items-center gap-2">
                 <MapPin className="h-4 w-4" /> Venezuela
               </p>

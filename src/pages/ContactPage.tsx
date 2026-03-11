@@ -1,4 +1,4 @@
-import { Phone, Mail, MapPin, MessageCircle } from 'lucide-react';
+import { Phone, Mail, MapPin, MessageCircle, Instagram } from 'lucide-react';
 
 export default function ContactPage() {
   return (
@@ -26,7 +26,17 @@ export default function ContactPage() {
             </div>
             <div>
               <h3 className="font-heading font-semibold text-foreground">Email</h3>
-              <p className="text-muted-foreground text-sm">info@inmobiliariayg.com</p>
+              <a href="mailto:yuranci1212@gmail.com" className="text-muted-foreground text-sm hover:text-primary transition-colors">yuranci1212@gmail.com</a>
+            </div>
+          </div>
+
+          <div className="flex items-start gap-4">
+            <div className="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center flex-shrink-0">
+              <Instagram className="h-5 w-5 text-accent" />
+            </div>
+            <div>
+              <h3 className="font-heading font-semibold text-foreground">Instagram</h3>
+              <a href="https://www.instagram.com/inmobiliaria_yg?igsh=dWs3ZTBwY2k4emcz" target="_blank" rel="noopener noreferrer" className="text-muted-foreground text-sm hover:text-primary transition-colors">@inmobiliaria_yg</a>
             </div>
           </div>
 
