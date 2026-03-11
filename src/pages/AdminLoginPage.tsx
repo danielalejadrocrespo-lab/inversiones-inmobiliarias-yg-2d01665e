@@ -17,6 +17,20 @@ export default function AdminLoginPage() {
     }
   }, [loading, isAdmin, navigate]);
 
+  // If someone lands here from a direct URL without intent, redirect to home
+  useEffect(() => {
+    // Check if user arrived here as the initial page load (not via internal navigation)
+    if (!loading && !isAdmin && window.history.length <= 2 && document.referrer === '') {
+      // Only redirect if this seems like a fresh visit (not intentional navigation)
+      const isIntentional = sessionStorage.getItem('admin_login_intent');
+      if (!isIntentional) {
+        navigate('/', { replace: true });
+        return;
+      }
+    }
+    sessionStorage.setItem('admin_login_intent', 'true');
+  }, [loading, isAdmin, navigate]);
+
   useEffect(() => {
     inputRefs.current[0]?.focus();
   }, []);
