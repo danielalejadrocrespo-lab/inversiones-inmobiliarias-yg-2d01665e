@@ -137,6 +137,27 @@ export default function PropertyFormPage() {
     setForm((f) => ({ ...f, images: f.images.filter((_, i) => i !== index) }));
   };
 
+  const moveImage = (fromIndex: number, toIndex: number) => {
+    if (toIndex < 0 || toIndex >= form.images.length) return;
+    setForm((f) => {
+      const imgs = [...f.images];
+      const [moved] = imgs.splice(fromIndex, 1);
+      imgs.splice(toIndex, 0, moved);
+      return { ...f, images: imgs };
+    });
+  };
+
+  const [dragIndex, setDragIndex] = useState<number | null>(null);
+
+  const handleDragStart = (index: number) => setDragIndex(index);
+  const handleDragOver = (e: React.DragEvent) => e.preventDefault();
+  const handleDrop = (targetIndex: number) => {
+    if (dragIndex !== null && dragIndex !== targetIndex) {
+      moveImage(dragIndex, targetIndex);
+    }
+    setDragIndex(null);
+  };
+
   if (authLoading) return <div className="min-h-screen flex items-center justify-center">Cargando...</div>;
   if (!isAdmin) return <Navigate to="/admin/login" replace />;
 
