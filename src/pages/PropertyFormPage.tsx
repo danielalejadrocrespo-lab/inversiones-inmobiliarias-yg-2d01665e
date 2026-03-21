@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useCallback } from 'react';
 import { useNavigate, useParams, Navigate, Link } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '@/hooks/useAuth';
@@ -9,7 +9,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
-import { ArrowLeft, Upload, X, Loader2 } from 'lucide-react';
+import { ArrowLeft, Upload, X, Loader2, GripVertical, ChevronLeft, ChevronRight } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 import type { Property, PropertyType, OperationType } from '@/lib/types';
 
@@ -137,6 +137,27 @@ export default function PropertyFormPage() {
     setForm((f) => ({ ...f, images: f.images.filter((_, i) => i !== index) }));
   };
 
+  const moveImage = (fromIndex: number, toIndex: number) => {
+    if (toIndex < 0 || toIndex >= form.images.length) return;
+    setForm((f) => {
+      const imgs = [...f.images];
+      const [moved] = imgs.splice(fromIndex, 1);
+      imgs.splice(toIndex, 0, moved);
+      return { ...f, images: imgs };
+    });
+  };
+
+  const [dragIndex, setDragIndex] = useState<number | null>(null);
+
+  const handleDragStart = (index: number) => setDragIndex(index);
+  const handleDragOver = (e: React.DragEvent) => e.preventDefault();
+  const handleDrop = (targetIndex: number) => {
+    if (dragIndex !== null && dragIndex !== targetIndex) {
+      moveImage(dragIndex, targetIndex);
+    }
+    setDragIndex(null);
+  };
+
   if (authLoading) return <div className="min-h-screen flex items-center justify-center">Cargando...</div>;
   if (!isAdmin) return <Navigate to="/admin/login" replace />;
 
@@ -237,10 +258,34 @@ export default function PropertyFormPage() {
           {/* Images */}
           <div>
             <Label>Imágenes</Label>
+            <p className="text-xs text-muted-foreground mt-1">Arrastra para reordenar o usa las flechas. La primera imagen será la principal.</p>
             <div className="mt-2 flex flex-wrap gap-3">
               {form.images.map((img, i) => (
-                <div key={i} className="relative w-24 h-24 rounded-md overflow-hidden border group">
+                <div
+                  key={`${img}-${i}`}
+                  draggable
+                  onDragStart={() => handleDragStart(i)}
+                  onDragOver={handleDragOver}
+                  onDrop={() => handleDrop(i)}
+                  className={`relative w-28 h-28 rounded-md overflow-hidden border group cursor-grab active:cursor-grabbing transition-all ${
+                    dragIndex === i ? 'opacity-50 scale-95' : ''
+                  } ${i === 0 ? 'ring-2 ring-primary' : ''}`}
+                >
                   <img src={img} alt="" className="w-full h-full object-cover" />
+                  {i === 0 && (
+                    <span className="absolute top-0 left-0 bg-primary text-primary-foreground text-[10px] px-1.5 py-0.5 rounded-br-md font-medium">
+                      Principal
+                    </span>
+                  )}
+                  <div className="absolute inset-x-0 bottom-0 flex items-center justify-between bg-black/60 px-1 py-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <button type="button" onClick={() => moveImage(i, i - 1)} disabled={i === 0} className="text-white disabled:opacity-30 p-0.5">
+                      <ChevronLeft className="h-3.5 w-3.5" />
+                    </button>
+                    <span className="text-white text-[10px]">{i + 1}/{form.images.length}</span>
+                    <button type="button" onClick={() => moveImage(i, i + 1)} disabled={i === form.images.length - 1} className="text-white disabled:opacity-30 p-0.5">
+                      <ChevronRight className="h-3.5 w-3.5" />
+                    </button>
+                  </div>
                   <button
                     type="button"
                     onClick={() => removeImage(i)}
@@ -254,7 +299,7 @@ export default function PropertyFormPage() {
                 type="button"
                 onClick={() => fileRef.current?.click()}
                 disabled={uploading}
-                className="w-24 h-24 border-2 border-dashed rounded-md flex flex-col items-center justify-center text-muted-foreground hover:border-primary hover:text-primary transition-colors"
+                className="w-28 h-28 border-2 border-dashed rounded-md flex flex-col items-center justify-center text-muted-foreground hover:border-primary hover:text-primary transition-colors"
               >
                 {uploading ? <Loader2 className="h-6 w-6 animate-spin" /> : <Upload className="h-6 w-6" />}
                 <span className="text-xs mt-1">{uploading ? 'Subiendo' : 'Subir'}</span>
