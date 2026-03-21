@@ -9,7 +9,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
-import { ArrowLeft, Upload, X, Loader2 } from 'lucide-react';
+import { ArrowLeft, Upload, X, Loader2, GripVertical, ChevronLeft, ChevronRight } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 import type { Property, PropertyType, OperationType } from '@/lib/types';
 
