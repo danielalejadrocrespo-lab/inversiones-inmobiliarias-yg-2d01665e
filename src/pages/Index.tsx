@@ -136,7 +136,7 @@ const Index = () => {
       <section className="relative -mt-4 z-10 container mx-auto px-4">
         <div className="bg-card rounded-2xl shadow-card p-6 md:p-8 grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-0 md:divide-x divide-border">
           {[
-            { icon: TrendingUp, value: '10+', label: 'Años de experiencia' },
+            { icon: TrendingUp, value: '20+', label: 'Años de experiencia' },
             { icon: Home, value: '100+', label: 'Propiedades gestionadas' },
             { icon: Users, value: '500+', label: 'Clientes satisfechos' },
           ].map((stat, i) => (
@@ -172,7 +172,7 @@ const Index = () => {
           {[
             { icon: Home, title: 'Casas', description: 'Amplias casas familiares en las mejores ubicaciones del país', gradient: 'from-accent/10 to-accent/5' },
             { icon: Building2, title: 'Apartamentos', description: 'Modernos apartamentos con todas las comodidades que necesitas', gradient: 'from-primary/10 to-primary/5' },
-            { icon: ShieldCheck, title: 'Confianza', description: 'Más de 10 años respaldando tu inversión con profesionalismo', gradient: 'from-gold/10 to-gold/5' },
+            { icon: ShieldCheck, title: 'Confianza', description: 'Más de 20 años respaldando tu inversión con profesionalismo', gradient: 'from-gold/10 to-gold/5' },
           ].map((service, i) => (
             <motion.div key={service.title} custom={i + 1} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp}
               className="group relative bg-card rounded-2xl p-8 shadow-card hover:shadow-card-hover transition-all duration-500 border border-border/50 hover:border-accent/20 overflow-hidden"
