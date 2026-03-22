@@ -1,10 +1,20 @@
 import { useState, useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useSearchParams } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import { PropertyCard } from '@/components/PropertyCard';
 import { supabase } from '@/integrations/supabase/client';
 import type { Property, OperationType } from '@/lib/types';
-import { Button } from '@/components/ui/button';
+import { Search } from 'lucide-react';
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 20 },
+  visible: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: { delay: i * 0.1, duration: 0.5, ease: 'easeOut' },
+  }),
+};
 
 export default function PropertiesPage() {
   const [searchParams] = useSearchParams();
@@ -35,21 +45,24 @@ export default function PropertiesPage() {
   ];
 
   return (
-    <div className="py-12">
+    <div className="py-12 md:py-16">
       <div className="container mx-auto px-4">
-        <h1 className="font-heading font-bold text-3xl text-foreground mb-2">Propiedades</h1>
-        <p className="text-muted-foreground mb-8">Encuentra tu próxima inversión</p>
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+          <span className="text-accent font-body font-semibold text-sm uppercase tracking-widest">Catálogo</span>
+          <h1 className="font-heading font-bold text-3xl md:text-4xl text-foreground mt-2 mb-2">Propiedades</h1>
+          <p className="text-muted-foreground font-body text-lg mb-8">Encuentra tu próxima inversión</p>
+        </motion.div>
 
         {/* Tabs */}
-        <div className="flex gap-2 mb-8">
+        <div className="flex gap-2 mb-10 p-1 bg-muted rounded-xl w-fit">
           {tabs.map((tab) => (
             <button
               key={tab.key}
               onClick={() => setActiveTab(tab.key)}
-              className={`px-4 py-2 rounded-lg font-heading font-semibold text-sm transition-colors ${
+              className={`px-5 py-2.5 rounded-lg font-body font-semibold text-sm transition-all duration-300 ${
                 activeTab === tab.key
-                  ? 'bg-primary text-primary-foreground'
-                  : 'bg-muted text-muted-foreground hover:bg-muted/80'
+                  ? 'bg-accent text-accent-foreground shadow-md'
+                  : 'text-muted-foreground hover:text-foreground'
               }`}
             >
               {tab.label}
@@ -58,20 +71,32 @@ export default function PropertiesPage() {
         </div>
 
         {isLoading ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[1, 2, 3, 4, 5, 6].map((i) => (
-              <div key={i} className="h-80 rounded-lg bg-muted animate-pulse" />
+              <div key={i} className="h-80 rounded-2xl bg-muted animate-pulse" />
             ))}
           </div>
         ) : filtered.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filtered.map((p) => (
-              <PropertyCard key={p.id} property={p} />
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {filtered.map((p, i) => (
+              <motion.div
+                key={p.id}
+                custom={i}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                variants={fadeUp}
+              >
+                <PropertyCard property={p} />
+              </motion.div>
             ))}
           </div>
         ) : (
-          <div className="text-center py-16 text-muted-foreground">
-            <p className="text-lg">No se encontraron propiedades.</p>
+          <div className="text-center py-20">
+            <div className="w-20 h-20 rounded-2xl bg-muted flex items-center justify-center mx-auto mb-6">
+              <Search className="h-10 w-10 text-muted-foreground/40" />
+            </div>
+            <p className="text-lg text-muted-foreground font-body">No se encontraron propiedades.</p>
           </div>
         )}
       </div>
