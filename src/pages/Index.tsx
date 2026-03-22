@@ -136,7 +136,7 @@ const Index = () => {
       <section className="relative -mt-4 z-10 container mx-auto px-4">
         <div className="bg-card rounded-2xl shadow-card p-6 md:p-8 grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-0 md:divide-x divide-border">
           {[
-            { icon: TrendingUp, value: '10+', label: 'Años de experiencia' },
+            { icon: TrendingUp, value: '20+', label: 'Años de experiencia' },
             { icon: Home, value: '100+', label: 'Propiedades gestionadas' },
             { icon: Users, value: '500+', label: 'Clientes satisfechos' },
           ].map((stat, i) => (
