@@ -33,7 +33,7 @@ export const operationLabels: Record<OperationType, string> = {
   venta: 'Venta',
   renta: 'Renta',
   alquiler: 'Alquiler',
-  venta_y_alquiler: 'Venta y Alquiler',
+  venta_y_alquiler: 'Venta o Alquiler',
 };
 
 export function formatPrice(price: number): string {

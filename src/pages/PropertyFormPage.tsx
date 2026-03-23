@@ -204,7 +204,7 @@ export default function PropertyFormPage() {
                   <SelectItem value="venta">Venta</SelectItem>
                   <SelectItem value="renta">Renta</SelectItem>
                   <SelectItem value="alquiler">Alquiler</SelectItem>
-                  <SelectItem value="venta_y_alquiler">Venta y Alquiler</SelectItem>
+                  <SelectItem value="venta_y_alquiler">Venta o Alquiler</SelectItem>
                 </SelectContent>
               </Select>
             </div>
