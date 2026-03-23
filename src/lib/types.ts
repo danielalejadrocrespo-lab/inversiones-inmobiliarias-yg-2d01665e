@@ -1,5 +1,5 @@
 export type PropertyType = 'casa' | 'departamento' | 'terreno' | 'local_comercial';
-export type OperationType = 'venta' | 'renta';
+export type OperationType = 'venta' | 'renta' | 'alquiler' | 'venta_y_alquiler';
 
 export interface Property {
   id: string;
@@ -32,6 +32,8 @@ export const propertyTypeLabels: Record<PropertyType, string> = {
 export const operationLabels: Record<OperationType, string> = {
   venta: 'Venta',
   renta: 'Renta',
+  alquiler: 'Alquiler',
+  venta_y_alquiler: 'Venta y Alquiler',
 };
 
 export function formatPrice(price: number): string {
