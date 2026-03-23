@@ -32,6 +32,8 @@ export const propertyTypeLabels: Record<PropertyType, string> = {
 export const operationLabels: Record<OperationType, string> = {
   venta: 'Venta',
   renta: 'Renta',
+  alquiler: 'Alquiler',
+  venta_y_alquiler: 'Venta y Alquiler',
 };
 
 export function formatPrice(price: number): string {
