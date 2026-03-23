@@ -151,7 +151,7 @@ export type Database = {
     }
     Enums: {
       app_role: "admin" | "user"
-      operation_type: "venta" | "renta"
+      operation_type: "venta" | "renta" | "alquiler" | "venta_y_alquiler"
       property_type: "casa" | "departamento" | "terreno" | "local_comercial"
     }
     CompositeTypes: {
@@ -281,7 +281,7 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "user"],
-      operation_type: ["venta", "renta"],
+      operation_type: ["venta", "renta", "alquiler", "venta_y_alquiler"],
       property_type: ["casa", "departamento", "terreno", "local_comercial"],
     },
   },
