@@ -13,4 +13,4 @@ Allow: /
 User-agent: *
 Allow: /
 
-Sitemap: https://saplwanklahsqcwpjdia.supabase.co/functions/v1/sitemap
+Sitemap: https://inversiones-inmobiliarias-yg.lovable.app/sitemap.xml

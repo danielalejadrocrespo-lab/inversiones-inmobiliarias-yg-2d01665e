@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  <url>
+    <loc>https://inversiones-inmobiliarias-yg.lovable.app/</loc>
+    <lastmod>2026-03-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://inversiones-inmobiliarias-yg.lovable.app/propiedades</loc>
+    <lastmod>2026-03-24</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://inversiones-inmobiliarias-yg.lovable.app/contacto</loc>
+    <lastmod>2026-03-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://inversiones-inmobiliarias-yg.lovable.app/propiedad/8f6f4714-555c-4300-b32e-18f5427e76c0</loc>
+    <lastmod>2026-03-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://saplwanklahsqcwpjdia.supabase.co/storage/v1/object/public/property-images/1774211501716-28pttxewbsn.jpg</image:loc>
+      <image:caption>Alquiler Apartamento Chichiriviche</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://inversiones-inmobiliarias-yg.lovable.app/propiedad/3380014b-6e19-4f4d-8686-8eaf27bd6fee</loc>
+    <lastmod>2026-03-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://saplwanklahsqcwpjdia.supabase.co/storage/v1/object/public/property-images/1773186352040-yqzqon83rb.jpg</image:loc>
+      <image:caption>Se Vende Casa Urbanización Mora 2 La Victoria -Estado Aragua</image:caption>
+    </image:image>
+  </url>
+</urlset>
