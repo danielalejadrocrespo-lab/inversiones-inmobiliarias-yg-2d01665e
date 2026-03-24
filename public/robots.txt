@@ -12,3 +12,5 @@ Allow: /
 
 User-agent: *
 Allow: /
+
+Sitemap: https://inversiones-inmobiliarias-yg.lovable.app/sitemap.xml
